@@ -4,12 +4,14 @@ import os
 
 DEBUG = False
 DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default=os.environ["DATABASE_URL"],
-        conn_max_age=600
+    "default": dj_database_url.config(
+        conn_max_age=600,
+        conn_health_checks=True,
     )
 }
+
+
+print(DATABASES)
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
