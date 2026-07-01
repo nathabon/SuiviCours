@@ -6,11 +6,11 @@ class CustomUser(models.Model):
     PROFESSOR = 'professor'
     STUDENT = 'student'
     ROLE_CHOICES = [(PROFESSOR, 'Professeur'), (STUDENT, 'Élève')]
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES,null=True, blank=True)
 
 
 class Professor(models.Model):
-    user       = models.OneToOneField(User, on_delete=models.CASCADE)
+    user       = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
 
     @property
     def username(self):
