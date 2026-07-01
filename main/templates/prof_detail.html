@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+Le professeur est {{ prof.username }}.
+
+Vous pouvez le contacter <a href="mailto:{{ prof.email }}">ici</a>
+
+{% endblock %}

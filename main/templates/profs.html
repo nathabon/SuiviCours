@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+Voici tous les professeur qui sont ici :
+
+<ul>
+    {% for prof in profs %}
+    <li><a href="{% url 'prof-detail' prof.username %}">{{ prof.username }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
