@@ -10,7 +10,11 @@ DATABASES = {
         conn_max_age=600
     )
 }
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    ".onrender.com",
+]
 
 # This production code might break development mode, so we check whether we're in DEBUG mode
 if not DEBUG:
