@@ -1,0 +1,204 @@
+[
+    {
+        "matiere": "Mathématiques",
+        "niveau": "Sixième",
+        "chapitres": [
+            "Nombres entiers et décimaux",
+            "Fractions",
+            "Calculs avec les nombres entiers et décimaux",
+            "Résolution de problèmes numériques",
+            "Algèbre : égalités, motifs et situations pré-algébriques",
+            "Proportionnalité",
+            "Organisation et gestion de données",
+            "Probabilités",
+            "Longueurs, périmètres et durées",
+            "Aires",
+            "Volumes",
+            "Angles",
+            "Droites, segments et cercles",
+            "Triangles et quadrilatères",
+            "Symétrie axiale",
+            "Solides et patrons",
+            "Repérage dans le plan et dans l'espace",
+            "Initiation à la pensée informatique"
+        ]
+    },
+    {
+        "matiere": "Mathématiques",
+        "niveau": "Cinquième",
+        "chapitres": [
+            "Nombres relatifs",
+            "Fractions et quotients",
+            "Calculs avec les fractions",
+            "Priorités opératoires et enchaînements de calculs",
+            "Proportionnalité",
+            "Pourcentages, échelles et vitesses",
+            "Expressions littérales",
+            "Équations simples",
+            "Organisation et gestion de données",
+            "Statistiques",
+            "Probabilités",
+            "Angles et triangles",
+            "Parallélogrammes et quadrilatères",
+            "Symétrie centrale",
+            "Repérage sur une droite et dans le plan",
+            "Périmètres, aires et volumes",
+            "Prismes droits et cylindres",
+            "Algorithmique et programmation"
+        ]
+    },
+    {
+        "matiere": "Mathématiques",
+        "niveau": "Quatrième",
+        "chapitres": [
+            "Nombres relatifs et calculs",
+            "Fractions, quotients et opérations",
+            "Puissances",
+            "Calcul littéral et distributivité",
+            "Équations du premier degré",
+            "Proportionnalité, pourcentages et évolutions",
+            "Grandeurs composées et vitesses",
+            "Statistiques",
+            "Probabilités",
+            "Théorème de Pythagore",
+            "Théorème de Thalès",
+            "Triangles, parallélisme et angles",
+            "Transformations du plan : translation et rotation",
+            "Repérage et coordonnées",
+            "Aires et volumes",
+            "Géométrie dans l'espace",
+            "Algorithmique et programmation"
+        ]
+    },
+    {
+        "matiere": "Mathématiques",
+        "niveau": "Troisième",
+        "chapitres": [
+            "Nombres et calculs numériques",
+            "Arithmétique : diviseurs, multiples et nombres premiers",
+            "Puissances et racines carrées",
+            "Calcul littéral et identités remarquables",
+            "Équations et inéquations",
+            "Fonctions",
+            "Fonctions linéaires et affines",
+            "Proportionnalité, pourcentages et évolutions",
+            "Statistiques",
+            "Probabilités",
+            "Théorème de Pythagore et réciproque",
+            "Théorème de Thalès et réciproque",
+            "Trigonométrie dans le triangle rectangle",
+            "Transformations du plan : homothéties",
+            "Agrandissements et réductions",
+            "Géométrie dans l'espace",
+            "Algorithmique et programmation"
+        ]
+    },
+    {
+        "matiere": "Mathématiques",
+        "niveau": "Seconde",
+        "chapitres": [
+            "Vocabulaire ensembliste et logique",
+            "Algorithmique et programmation en Python",
+            "Nombres réels et intervalles",
+            "Arithmétique",
+            "Calcul littéral",
+            "Équations et inéquations",
+            "Vecteurs du plan",
+            "Droites du plan",
+            "Fonctions : généralités et représentations graphiques",
+            "Variations et extremums d'une fonction",
+            "Fonctions de référence",
+            "Information chiffrée et statistique descriptive",
+            "Croisement de deux variables qualitatives",
+            "Probabilités"
+        ]
+    },
+    {
+        "matiere": "Mathématiques spécialité",
+        "niveau": "Première",
+        "chapitres": [
+            "Vocabulaire ensembliste et logique",
+            "Algorithmique et programmation : listes",
+            "Suites numériques et modèles discrets",
+            "Équations et fonctions polynômes du second degré",
+            "Dérivation",
+            "Variations et courbes représentatives des fonctions",
+            "Fonction exponentielle",
+            "Trigonométrie",
+            "Calcul vectoriel et produit scalaire",
+            "Géométrie repérée",
+            "Probabilités conditionnelles et indépendance",
+            "Variables aléatoires réelles",
+            "Statistiques et expérimentations"
+        ]
+    },
+    {
+        "matiere": "Mathématiques intégrées à l'enseignement scientifique",
+        "niveau": "Première",
+        "chapitres": [
+            "Automatismes numériques et algébriques",
+            "Statistiques et représentations de données",
+            "Probabilités",
+            "Proportions, pourcentages et évolutions",
+            "Fonctions et modélisation",
+            "Suites numériques simples",
+            "Algorithmique et programmation"
+        ]
+    },
+    {
+        "matiere": "Mathématiques spécialité",
+        "niveau": "Terminale",
+        "chapitres": [
+            "Vocabulaire ensembliste et logique",
+            "Algorithmique et programmation",
+            "Combinatoire et dénombrement",
+            "Manipulation des vecteurs, des droites et des plans de l'espace",
+            "Orthogonalité et distances dans l'espace",
+            "Représentations paramétriques et équations cartésiennes",
+            "Suites numériques",
+            "Limites des fonctions",
+            "Compléments sur la dérivation",
+            "Continuité des fonctions d'une variable réelle",
+            "Fonction logarithme",
+            "Fonctions sinus et cosinus",
+            "Primitives et équations différentielles",
+            "Calcul intégral",
+            "Succession d'épreuves indépendantes et schéma de Bernoulli",
+            "Sommes de variables aléatoires",
+            "Concentration et loi des grands nombres"
+        ]
+    },
+    {
+        "matiere": "Mathématiques complémentaires",
+        "niveau": "Terminale",
+        "chapitres": [
+            "Modèles définis par une fonction d'une variable",
+            "Modèles d'évolution",
+            "Approche historique de la fonction logarithme",
+            "Calculs d'aires",
+            "Répartition des richesses et inégalités",
+            "Inférence bayésienne",
+            "Répétition d'expériences indépendantes et échantillonnage",
+            "Temps d'attente",
+            "Corrélation et causalité",
+            "Suites numériques et modèles discrets",
+            "Fonctions : continuité, dérivabilité, limites et représentation graphique",
+            "Primitives et équations différentielles",
+            "Fonctions convexes",
+            "Intégration",
+            "Lois discrètes",
+            "Lois à densité",
+            "Statistique à deux variables quantitatives",
+            "Algorithmique et programmation"
+        ]
+    },
+    {
+        "matiere": "Mathématiques expertes",
+        "niveau": "Terminale",
+        "chapitres": [
+            "Nombres complexes",
+            "Arithmétique",
+            "Graphes et matrices"
+        ]
+    }
+]

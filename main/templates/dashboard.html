@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+<h2>Mon nom : <b>{{ prof.username }}</b></h2>
+
+<h2>Mes élèves</h2>
+<ul>
+    {% for student in prof.students.all %}
+    
+    <li><a href="{% url 'dashboard-student' student.first_name %}">{{ student.first_name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>Mes cours</h2>
+<ul>
+    {% for lesson in prof.lesson_set.all %}
+    <li>{{ lesson.date }}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
