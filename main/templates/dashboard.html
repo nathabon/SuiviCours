@@ -9,14 +9,14 @@
 <ul>
     {% for student in prof.students.all %}
     
-    <li><a href="{% url 'dashboard-student' student.first_name %}">{{ student.first_name }}</a></li>
+    <li><a href="{% url 'dashboard-student' student.slug %}">{{ student.first_name }}</a></li>
     {% endfor %}
 </ul>
 
 <h2>Mes cours</h2>
 <ul>
-    {% for lesson in prof.lesson_set.all %}
-    <li>{{ lesson.date }}</li>
+    {% for lesson in prof.lessons.all %}
+    <li><a href="{% url 'dashboard-lesson' lesson.date_formated %}">Le {{ lesson.date }} avec {{ lesson.student }}</a></li>
     {% endfor %}
 </ul>
 

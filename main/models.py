@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
-import datetime
+from datetime import datetime, timedelta
 import decimal
 
 
@@ -58,7 +58,7 @@ class Chapter(models.Model):
 
 
 class Professor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="professor_profile")
 
     default_price = models.fields.DecimalField(max_digits=4, decimal_places=1, default=decimal.Decimal(20.0))
 
@@ -84,6 +84,7 @@ class Student(models.Model):
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100, blank=True)
+    slug = models.CharField(max_length=100, unique=True)
 
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="students", blank=True, null=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE, related_name="students", blank=True, null=True)
@@ -110,7 +111,7 @@ class Lesson(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name="lessons")
 
     date = models.fields.DateTimeField(default=timezone.now)
-    duration = models.fields.DurationField(default=datetime.timedelta(hours=1))
+    duration = models.fields.DurationField(default=timedelta(hours=1))
 
     status = models.CharField(
         max_length=20,
@@ -126,6 +127,17 @@ class Lesson(models.Model):
     price = models.fields.DecimalField(max_digits=4, decimal_places=1, default=decimal.Decimal(20.0))
     paid = models.fields.BooleanField(default=False)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["student", "professor", "date"],
+                name="unique_lesson_student_professor_date"
+            )
+        ]
+
+    @property
+    def date_formated(self):
+        return self.date.astimezone(timezone.get_default_timezone()).strftime('%y-%m-%d-%H-%M')
 
     @property
     def is_past(self):

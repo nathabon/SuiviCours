@@ -19,6 +19,6 @@ urlpatterns = [
     path('profs/<str:username>', views.prof_detail_view, name="prof-detail"),
 
     path('dashboard/', views.dashboard_view, name='dashboard'),
-    path('dashboard/student/<str:student_name>', views.dashboard_student_detail_view, name='dashboard-student'),
-    #path('dashboard/lesson/<str:uuid>', , name='dashboard-student'),
+    path('dashboard/student/<str:student_slug>', views.dashboard_student_detail_view, name='dashboard-student'),
+    path('dashboard/lesson/<str:date>', views.dashboard_lesson_detail_view, name='dashboard-lesson'),
 ]

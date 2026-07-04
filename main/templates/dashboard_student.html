@@ -5,10 +5,10 @@
 <h1>Dashboard élève</h1>
 <b>{{ student.first_name }}</b>
 
-<h2>Coors avec {{ student.first_name }}</h2>
+<h2>Cours avec {{ student.first_name }}</h2>
 <ul>
-    {% for lesson in student.lesson_set.all %}
-    <li>{{ lesson.date }}</li>
+    {% for lesson in student.lessons.all %}
+    <li><a href="{% url 'dashboard-lesson' lesson.date_formated %}">{{ lesson.date }}</a></li>
     {% endfor %}
 </ul>
 
