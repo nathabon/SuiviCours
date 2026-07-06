@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Dashboard parent</h1>
+
+<h2>{{ student.first_name }}</h2>
+
+<h2>Prochaine lesson</h2>
+
+
+<h2>Toutes mes lessons</h2>
+<ul>
+    {% for lesson in student.lessons.all%}
+        <li><a href="{% url 'dashboard-parent-lesson' student.uuid lesson.date_formated %}">{{ lesson.date }} avec {{ lesson.professor.name }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

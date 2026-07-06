@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Dashboard parent</h1>
+
+<h2>Lesson du {{ lesson.date }} avec {{ lesson.professor.name }}</h2>
+
+
+
+{% if lesson.is_upcoming %}
+    <b>Devoirs donnés</b>
+    <p>{{ lesson.homeworks }}</p>
+
+{% else %}
+    <b>Commentaires pour les parents</b>
+    <p>{{ lesson.notes }}</p>
+{% endif %}
+
+
+{% endblock %}

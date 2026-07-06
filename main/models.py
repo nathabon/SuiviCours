@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
 from datetime import datetime, timedelta
 import decimal
+import uuid
 
 
 class Subject(models.Model):
@@ -69,18 +70,19 @@ class Professor(models.Model):
     @property
     def email(self):
         return self.user.email
+    
+    @property
+    def name(self):
+        return self.user.get_full_name() or self.user.username
 
     def __str__(self) -> str:
-        return self.user.get_full_name() or self.user.username
+        return self.name
 
 
 
 class Student(models.Model):
-    professor = models.ForeignKey(
-        Professor,
-        on_delete=models.CASCADE,
-        related_name="students"
-    )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=False, null=False)
+    professor = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name="students")
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100, blank=True)
@@ -123,6 +125,8 @@ class Lesson(models.Model):
     reminder = models.fields.CharField(max_length=255, blank=True) # for the professor, before
     notes = models.fields.CharField(max_length=255, blank=True) # for the student, after
     commment = models.fields.CharField(max_length=255, blank=True) # for the professor, after
+
+    chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True, blank=True)
 
     price = models.fields.DecimalField(max_digits=4, decimal_places=1, default=decimal.Decimal(20.0))
     paid = models.fields.BooleanField(default=False)
