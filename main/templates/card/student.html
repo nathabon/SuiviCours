@@ -1,0 +1,23 @@
+<div class="bg-primary-subtle rounded p-2 my-1 d-flex align-items-center">
+    <div class="rounded-circle bg-sc-mint d-flex justify-content-center align-items-center me-2"
+        style="width: 48px; height: 48px;">
+        {{ student.initials }}
+    </div>
+
+    <div class="flex-grow-1">
+        <p class="h2 mb-1">{{ student.full_name }}</p>
+        <span class="rounded-pill bg-sc-mint px-2 py-1">
+            {% if student.next_lessons|length > 0 %}
+                Prochain cours : {{student.next_lessons.all.first.date}}
+            
+            {% else %}
+                Pas de cours prévu
+            {% endif %}
+        </span>
+        <p class="fw-light mb-0">
+            {{ student.subject }} - {{ student.level }} - {{ student.default_price }}€/h
+        </p>
+    </div>
+
+    <i class="bi bi-arrow-right fs-4 ms-2"></i>
+</div>

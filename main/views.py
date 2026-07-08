@@ -16,7 +16,7 @@ def hello_view(request: HttpRequest):
 
 
 def about_us_view(request: HttpRequest):
-    return render(request, 'about.html')
+    return render(request, 'other/about.html')
 
 def contact(request: HttpRequest):
     return HttpResponse('<h1> Contact </h1>')
@@ -55,7 +55,9 @@ def prof_detail_view(request: HttpRequest, username: str):
 def dashboard_view(request: HttpRequest):
     prof = request.user.professor_profile
 
-    return render(request, 'dashboard/dashboard.html', {"prof": prof})
+    events = [lesson.toEvent() for lesson in prof.lessons.all()]
+
+    return render(request, 'dashboard/dashboard.html', {"prof": prof, "events": events})
 
 
 @login_required

@@ -99,6 +99,18 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}".strip()
     
+    @property
+    def full_name(self):
+        return self.first_name + " " + self.last_name
+    
+    @property
+    def initials(self):
+        return self.first_name[0] + self.last_name[0]
+    
+    @property
+    def next_lessons(self):
+        return self.lessons.filter(date__gt=timezone.now()).order_by("date")
+    
 
 
 class Lesson(models.Model):
@@ -124,7 +136,7 @@ class Lesson(models.Model):
     homeworks = models.fields.CharField(max_length=255, blank=True) # for the student, before
     reminder = models.fields.CharField(max_length=255, blank=True) # for the professor, before
     notes = models.fields.CharField(max_length=255, blank=True) # for the student, after
-    commment = models.fields.CharField(max_length=255, blank=True) # for the professor, after
+    comment = models.fields.CharField(max_length=255, blank=True) # for the professor, after
 
     chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -142,9 +154,13 @@ class Lesson(models.Model):
     @property
     def date_formated(self):
         return self.date.astimezone(timezone.get_default_timezone()).strftime('%y-%m-%d-%H-%M')
+    
+    @property
+    def end_date(self):
+        return self.date + self.duration
 
     @property
-    def is_past(self):
+    def is_passed(self):
         return self.date < timezone.now()
 
     @property
@@ -153,6 +169,15 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.date:%d/%m/%Y %H:%M}"
+    
+    def toEvent(self):
+        return {
+            "title": self.student.full_name,
+            # "id": self.date_formated,
+            "start": self.date.isoformat(),
+            "end": self.end_date.isoformat(),
+            "editable": False
+        }
 
 
 

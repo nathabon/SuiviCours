@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 
-{% block title %} Créer un compte {% endblock %}
+{% block title %} - Créer un compte {% endblock %}
 
 {% block main_class %}
 flex-grow-1 d-flex align-items-center justify-content-center py-5 px-3
@@ -26,7 +26,7 @@ flex-grow-1 d-flex align-items-center justify-content-center py-5 px-3
         {% endif %}
 
         {% for field in form %}
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-2">
             {% if field.errors or form.non_field_errors %}
             {% render_field field class+="form-control is-invalid" placeholder=" " %}
             {% else %}
@@ -45,13 +45,13 @@ flex-grow-1 d-flex align-items-center justify-content-center py-5 px-3
         </div>
         {% endfor %}
 
-        <button class="btn btn-sc-primary w-100 py-2" type="submit">
+        <button class="btn btn-sc-primary w-100 py-2 mt-2" type="submit">
             Créer un compte
         </button>
         <small class="fw-lighter">En appuyant sur <i>Créer un compte</i>, j'accepte les <a href="">CGU</a> et la <a href="">Politique de Confidentialité</a>.</small>
 
         <div class="pt-3">
-            <p class="fw-light text-center my-0"><a class="link-primary text-decoration-none"
+            <p class="fw-light text-center my-0">Déjà inscris ? <a class="link-primary text-decoration-none"
                     href="{% url 'login' %}">Se connecter</a></p>
         </div>
     </form>

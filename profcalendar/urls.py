@@ -10,7 +10,7 @@ urlpatterns = [
     path('about-us/', views.about_us_view, name='about'),
     path('contact/', views.contact, name='contact'),
 
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
 
     path('signup/',  views.signup_view, name="signup"),
     path('login/', LoginView.as_view(template_name='account/login.html', redirect_authenticated_user=True), name='login'),
