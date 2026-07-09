@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils.text import slugify
 
-from main.models import Subject, Level, Chapter  # à adapter
+from main.models import Subject, Level, Chapter
 
 
 class Command(BaseCommand):

@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %} - Élève {{ student.first_name }} {% endblock %}
+
+{% block content %}
+
+<style>
+#collapseMoreInfo.collapsing {
+    transition: height 0.35s ease;
+    overflow: hidden;
+}
+
+.collapse-content {
+    overflow: hidden;
+}
+
+.collapse-content > :last-child {
+    margin-bottom: 0;
+}
+
+.more-info-button {
+    min-width: 110px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.more-info-button:hover {
+    transform: translateY(-1px);
+}
+
+textarea {
+  resize: none;
+  field-sizing: content;
+}
+
+</style>
+
+<div class="container my-2">
+    <!-- MARK: Panel Info -->
+    <div class="bg-body-secondary rounded p-2 m-1 position-relative">
+        <form action="" method="post">
+            <div class="position-absolute top-0 end-0 m-2">
+                <button class="bg-danger-subtle rounded-pill border border-0 p-0 px-2 form-toggle-display" type="button" onclick="toggleEdit()">
+                    <p class="mb-0">Modifier</p>
+                </button>
+                <button class="bg-danger-subtle rounded-pill border border-0 p-0 px-2 form-toggle-display" type="button" data-bs-toggle="modal" data-bs-target="#shareModal">
+                    Partager
+                </button>
+
+                <button class="bg-danger-subtle rounded-pill border border-0 p-0 px-2 form-toggle-edit d-none" type="button"  onclick="toggleEdit()">
+                    <p class="mb-0">Annuler</p>
+                </button>
+                <button class="bg-success-subtle rounded-pill border border-0 p-0 px-2 form-toggle-edit d-none" type="submit">
+                    <p class="mb-0">Accepter</p>
+                </button>
+            </div>
+
+            <h1>{{ student.full_name }}</h1>
+
+            <p class="fw-light form-toggle-display">{{ student.subject }} - {{ student.level}} - {{ student.default_price }}€/h</p>
+            <div class="row g-1 align-item-center flew-nowrap fw-light form-toggle-edit d-none">
+                <div class="col-auto">
+                    <select class="form-select form-select-sm">
+                        <option value="1" selected>Mathématiques</option>
+                        <option value="2">Physique</option>
+                        <option value="3">Informatique</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <select class="form-select form-select-sm">
+                        <option value="1" selected>Terminale</option>
+                        <option value="2">Première</option>
+                        <option value="3">Seconde</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <input class="form-control form-control-sm" type="number" value="30" id="">
+                        <span class="input-group-text p-1">€/h</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="fw-light form-toggle-display">
+                <a href="mailto:hugo@gmail.com" class="link-secondary text-decoration-none">hugo.psala@gmail.com</a>
+                -
+                <a href="tel:0102030405" class="link-secondary text-decoration-none">01 02 03 04 05</a>
+            </p>
+            <div class="row g-2 align-items-center flex-nowrap form-toggle-edit d-none">
+                <div class="col-auto">
+                    <input type="email" class="form-control" name="email" value="email@example.com">
+                </div>
+                <div class="col-auto text-secondary">&ndash;</div>
+                <div class="col-auto">
+                    <input type="tel" class="form-control" width="1em" value="01 02 03 04 05" id="">
+                </div>
+            </div>
+            
+            <textarea name="" id="" readonly class="form-control-plaintext form-toggle-readonly">Élève sérieux, apprend vite les nouvelles leçons</textarea>
+            
+
+            <div class="collapse" id="collapseMoreInfo">
+                <div class="collapse-content pt-3">
+                    <p class="mb-2">Salut</p>
+                    <p class="mb-0">Test</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-2">
+                <button type="button" id="moreInfoButton"
+                    class="btn btn-link link-primary text-decoration-none p-0 more-info-button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseMoreInfo" aria-expanded="false" aria-controls="collapseMoreInfo">
+                    Afficher plus
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- MARK: Prochain cours -->
+    <div class="bg-body-secondary rounded p-2 m-1 position-relative">
+        <h2>Prochains cours</h2>
+        {% for lesson in student.next_lessons.all %}
+            <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{% include 'card/lesson.html' %}</a>
+        {% endfor %}
+    </div>
+
+    <!-- MARK: Toutes les séances -->
+    <div class="bg-body-secondary rounded p-2 m-1">
+        <h2>Séances (2)</h2>
+    </div>
+</div>
+
+
+<!-- MARK: Modals -->
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="shareModalLabel">Partager la fiche élève</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                En partageant cette fiche, les personnes avec le lien auront accès aux cours, aux chapitres révisés et aux appréciations publiques que vous laissez. 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                {% url 'dashboard-parent-student' student.uuid as parent_url %}
+                
+                <button type="button" class="btn btn-primary" data-url="{{ request.scheme }}://{{ request.get_host }}{{ parent_url }}"
+                    onclick="copyStudentLink(this)">
+                    Copier le lien
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleEmailEdit() {
+        const display = document.getElementById("email-display");
+        const edit = document.getElementById("email-edit");
+
+        display.classList.toggle("d-none");
+        edit.classList.toggle("d-none");
+    }
+
+    function toggleDNone(element) {
+        element.classList.toggle("d-none");
+    }
+
+    function toggleReadOnly(element) {
+        element.readOnly = !element.readOnly;
+        element.classList.toggle("form-control");
+        element.classList.toggle("form-control-plaintext");
+    }
+
+    function toggleEdit() {
+        const displays = document.querySelectorAll(".form-toggle-display");
+        const edits = document.querySelectorAll(".form-toggle-edit");
+        const readonlys = document.querySelectorAll(".form-toggle-readonly");
+
+        displays.forEach(element => {
+            toggleDNone(element);
+        });
+
+        edits.forEach(element => {
+            toggleDNone(element);
+        });
+
+        readonlys.forEach(element => {
+            toggleReadOnly(element);
+        })
+    }
+
+    function copyStudentLink(button) {
+        const url = button.dataset.url;
+
+        navigator.clipboard.writeText(url).then(() => {
+            button.textContent = "Lien copié";
+            button.classList.remove("btn-primary");
+            button.classList.add("btn-success");
+
+            setTimeout(() => {
+                button.textContent = "Copier le lien";
+                button.classList.remove("btn-success");
+                button.classList.add("btn-primary");
+            }, 2000);
+        });
+    }
+</script>
+
+<script>
+    const collapseMoreInfo = document.getElementById("collapseMoreInfo");
+    const moreInfoButton = document.getElementById("moreInfoButton");
+
+    collapseMoreInfo.addEventListener("show.bs.collapse", function () {
+        moreInfoButton.textContent = "Afficher moins";
+        moreInfoButton.setAttribute("aria-expanded", "true");
+    });
+
+    collapseMoreInfo.addEventListener("hide.bs.collapse", function () {
+        moreInfoButton.textContent = "Afficher plus";
+        moreInfoButton.setAttribute("aria-expanded", "false");
+    });
+</script>
+
+{% endblock %}

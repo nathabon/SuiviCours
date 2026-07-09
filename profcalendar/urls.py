@@ -7,18 +7,27 @@ urlpatterns = [
     path('', views.hello_view, name='index'),
 
     path('hello/', views.hello_view, name='hello'),
-    path('about-us/', views.about_us_view, name='about-us'),
+    path('about-us/', views.about_us_view, name='about'),
+    path('contact/', views.contact, name='contact'),
 
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
 
     path('signup/',  views.signup_view, name="signup"),
-    path('login/', LoginView.as_view(template_name='login.html', redirect_authenticated_user=True), name='login'),
-    path('logout/', LogoutView.as_view(template_name='logout.html'), name='logout'),
+    path('login/', LoginView.as_view(template_name='account/login.html', redirect_authenticated_user=True), name='login'),
+    path('logout/', LogoutView.as_view(template_name='account/logout.html'), name='logout'),
     
     path('profs/', views.profs_list_view, name='prof-list'),
-    path('profs/<str:username>', views.prof_detail_view, name="prof-detail"),
+    path('profs/<str:username>/', views.prof_detail_view, name="prof-detail"),
 
     path('dashboard/', views.dashboard_view, name='dashboard'),
-    path('dashboard/student/<str:student_name>', views.dashboard_student_detail_view, name='dashboard-student'),
-    #path('dashboard/lesson/<str:uuid>', , name='dashboard-student'),
+    path('dashboard/student/<slug:student_slug>/', views.dashboard_student_detail_view, name='dashboard-student'),
+    path('dashboard/lesson/add/', views.dashboard_lesson_add_view, name='dashboard-add-lesson'),
+    path('dashboard/lesson/<str:date>/', views.dashboard_lesson_detail_view, name='dashboard-lesson'),
+
+    path('parent/<str:student_uuid>/', views.dashboard_parent_student_view, name='dashboard-parent-student'),
+    path('parent/<str:student_uuid>/lesson/<str:date>/', views.dashboard_parent_lesson_view, name='dashboard-parent-lesson'),
+
+
+    path('api/student/<int:id>/', views.api_student, name='api-student'),
+    path('api/student/<int:id>/chapters/', views.api_student_chapters, name='api-student-chapters'),
 ]

@@ -1,0 +1,93 @@
+:root {
+    --sc-blue: #2F6FED;
+    --sc-mint: #18B5A4;
+    --sc-orange: #FFB84D;
+    --sc-slate: #243447;
+    --sc-light: #F7FAFC;
+}
+
+body {
+    background-color: var(--sc-light);
+    color: var(--sc-slate);
+}
+
+.text-sc-blue {
+    color: var(--sc-blue);
+}
+
+.text-sc-mint {
+    color: var(--sc-mint);
+}
+
+.bg-sc-blue {
+    background-color: var(--sc-blue);
+}
+
+.bg-sc-mint {
+    background-color: var(--sc-mint);
+}
+
+.bg-sc-slate {
+    background-color: var(--sc-slate);
+}
+
+.btn-sc-primary {
+    background-color: var(--sc-blue);
+    color: white;
+    border-radius: 999px;
+    font-weight: 600;
+    padding: 0.75rem 1.4rem;
+}
+
+.btn-sc-primary:hover {
+    background-color: #245bd1;
+    color: white;
+}
+
+.btn-sc-outline {
+    border: 1px solid #d0d7de;
+    color: var(--sc-slate);
+    background-color: white;
+    border-radius: 999px;
+    font-weight: 600;
+    padding: 0.75rem 1.4rem;
+}
+
+.btn-sc-outline:hover {
+    border-color: var(--sc-blue);
+    color: var(--sc-blue);
+    background-color: white;
+}
+
+.hero {
+    background:
+        radial-gradient(circle at top left, rgba(47, 111, 237, 0.12), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(24, 181, 164, 0.14), transparent 35%);
+}
+
+.logo-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--sc-blue), var(--sc-mint));
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.rounded-4xl {
+    border-radius: 2rem;
+}
+
+.section-title {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.hero-title {
+    font-weight: 850;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+}

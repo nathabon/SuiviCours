@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% block title %} - Dashboard {% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js"></script>
+
+{{ events|json_script:"lessonEvents" }}
+
+<script>console.log(lessonEvents);</script>
+
+<script>
+    function lessonToEvent(lesson) {
+        return {
+            title: lesson["student"][""]
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const lessonEvents = JSON.parse(
+            document.getElementById("lessonEvents").textContent
+        );
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'fr',
+            initialView: 'timeGridWeek',
+            headerToolbar: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'today timeGridDay,timeGridWeek,listMonth'
+            },
+            buttonText: {
+                today: "Aujourd'hui",
+                month: 'Mois',
+                week: 'Semaine',
+                day: 'Jour',
+                list: 'Liste'
+            },
+            events: lessonEvents,
+            slotMinTime: "08:00:00",
+            slotMaxTime: "22:00:00",
+            scrollTime: "10:00:00",
+            firstDay: 1,
+            nowIndicator: true,
+        });
+
+        calendar.render();
+    });
+</script>
+
+<div class="container">
+    <h1>Dashboard</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-lg mb-3">
+            <h2>Mes élèves</h2>
+            {% for student in prof.students.all %}
+                <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-student' student.slug %}">{% include 'card/student.html' %}</a>
+            {% endfor %}
+
+            <a class="link-secondary text-black text-decoration-none" href="">
+                <div class="bg-primary-subtle rounded p-2 my-1">
+                    <span>Ajouter un élève</span>
+                </div>
+            </a>
+
+            <h2 class="mt-4">Mes cours</h2>
+            {% for lesson in prof.lessons.all %}
+                <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{% include 'card/lesson.html' %}</a>
+            {% endfor %}
+
+            <a class="link-secondary text-black text-decoration-none" href="">
+                <div class="bg-primary-subtle rounded p-2 my-1">
+                    <span>Ajouter un cours</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg">
+            <h2>Calendrier</h2>
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

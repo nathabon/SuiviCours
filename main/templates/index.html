@@ -1,8 +1,295 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SuiviCours - Le suivi simple des cours particuliers{% endblock %}
 
 {% block content %}
 
-<h1>Hello Django</h1>
+<header class="hero py-5">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <p class="text-sc-mint text-uppercase fw-bold small mb-3">
+                    Le suivi simple des cours particuliers
+                </p>
+
+                <h1 class="display-3 hero-title mb-4">
+                    Gagnez du temps.<br>
+                    Suivez mieux vos élèves.<br>
+                    <span class="text-sc-blue">Rassurez les parents.</span>
+                </h1>
+
+                <p class="lead text-secondary mb-4">
+                    SuiviCours aide les professeurs de cours particuliers à centraliser leurs élèves,
+                    leurs cours et leur suivi pédagogique dans une interface claire, rapide et pensée
+                    pour le quotidien.
+                </p>
+
+                <div class="d-flex flex-column flex-sm-row gap-3 mb-4">
+                    <a href="{% url 'signup' %}" class="btn btn-sc-primary">
+                        Commencer maintenant
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-sc-outline">
+                        Se connecter
+                    </a>
+                </div>
+
+                <p class="text-secondary small mb-0">
+                    Pensé pour les professeurs indépendants, les étudiants donnant des cours particuliers
+                    et les petites structures d’accompagnement scolaire.
+                </p>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg rounded-4xl">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <p class="text-secondary small mb-1">Tableau de bord</p>
+                                <h2 class="h4 fw-bold mb-0">Suivi des élèves</h2>
+                            </div>
+                            <span class="badge rounded-pill bg-success-subtle text-success">
+                                Simple et clair
+                            </span>
+                        </div>
+
+                        <div class="card bg-light border-0 rounded-4 mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <strong>Camille</strong>
+                                    <span class="text-secondary small">3e</span>
+                                </div>
+                                <p class="text-secondary small mb-2">
+                                    Dernier cours : équations et problèmes
+                                </p>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-sc-blue" style="width: 72%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card bg-light border-0 rounded-4 mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <strong>Lucas</strong>
+                                    <span class="text-secondary small">1re</span>
+                                </div>
+                                <p class="text-secondary small mb-2">
+                                    À revoir : dérivation et variations
+                                </p>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-sc-mint" style="width: 54%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-primary rounded-4 mb-0">
+                            <strong>Prochain cours :</strong><br>
+                            Préparation rapide grâce à l’historique et aux notes de suivi.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 section-title mb-3">
+                Moins d’administratif, plus de pédagogie.
+            </h2>
+            <p class="lead text-secondary mx-auto" style="max-width: 760px;">
+                Entre les élèves, les horaires, les notions travaillées et les échanges avec les familles,
+                le suivi peut vite devenir dispersé. SuiviCours remet tout au même endroit.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold">Gagnez du temps</h3>
+                        <p class="text-secondary mb-0">
+                            Retrouvez rapidement les informations importantes de chaque élève :
+                            cours passés, notions travaillées, difficultés, progrès et prochaines étapes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold">Suivez vraiment vos élèves</h3>
+                        <p class="text-secondary mb-0">
+                            Gardez une trace claire de ce qui a été fait et de ce qu’il faut reprendre.
+                            Vous préparez vos séances plus efficacement, sans repartir de zéro.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold">Rassurez les parents</h3>
+                        <p class="text-secondary mb-0">
+                            Un suivi structuré montre que les cours avancent, que les difficultés sont identifiées
+                            et que l’accompagnement est sérieux.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container py-5">
+        <div class="bg-sc-slate text-white rounded-4xl p-4 p-md-5">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <h2 class="display-6 section-title mb-3">
+                        Un outil simple pour professionnaliser vos cours particuliers.
+                    </h2>
+                    <p class="lead opacity-75 mb-0">
+                        SuiviCours vous aide à donner une image plus organisée, plus fiable et plus professionnelle.
+                        Vous ne vendez pas seulement une heure de cours : vous proposez un accompagnement suivi,
+                        lisible et rassurant.
+                    </p>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="card border-0 rounded-4">
+                        <div class="card-body p-4">
+                            <p class="fw-bold mb-3 text-dark">Avec SuiviCours, vous pouvez :</p>
+                            <ul class="text-secondary mb-0">
+                                <li>centraliser vos élèves ;</li>
+                                <li>retrouver l’historique des cours ;</li>
+                                <li>noter les difficultés et les progrès ;</li>
+                                <li>préparer plus vite les séances suivantes ;</li>
+                                <li>mieux valoriser votre accompagnement.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+                <p class="text-sc-mint text-uppercase fw-bold small mb-3">
+                    Fonctionnement
+                </p>
+                <h2 class="display-5 section-title mb-3">
+                    Simple à prendre en main.
+                </h2>
+                <p class="lead text-secondary">
+                    L’objectif est de vous faire gagner du temps sans ajouter de complexité.
+                </p>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <div class="card-body p-4">
+                                <span class="badge rounded-pill bg-sc-blue mb-3">1</span>
+                                <h3 class="h5 fw-bold">Ajoutez vos élèves</h3>
+                                <p class="text-secondary mb-0">
+                                    Créez une fiche claire pour chaque élève avec les informations utiles.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <div class="card-body p-4">
+                                <span class="badge rounded-pill bg-sc-mint mb-3">2</span>
+                                <h3 class="h5 fw-bold">Notez vos cours</h3>
+                                <p class="text-secondary mb-0">
+                                    Gardez une trace des notions abordées, des progrès et des points à revoir.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <div class="card-body p-4">
+                                <span class="badge rounded-pill text-dark mb-3"
+                                    style="background-color: var(--sc-orange);">3</span>
+                                <h3 class="h5 fw-bold">Suivez l’évolution</h3>
+                                <p class="text-secondary mb-0">
+                                    Retrouvez rapidement où en est chaque élève avant chaque nouvelle séance.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container py-5">
+        <div class="card border-0 shadow-lg rounded-4xl overflow-hidden">
+            <div class="card-body p-4 p-md-5 text-white"
+                style="background: linear-gradient(135deg, var(--sc-blue), var(--sc-mint));">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <span class="badge rounded-pill bg-white text-sc-blue mb-3">
+                            Version premium
+                        </span>
+                        <h2 class="display-6 section-title mb-3">
+                            Passez à un suivi encore plus complet.
+                        </h2>
+                        <p class="lead mb-0 opacity-75">
+                            La version premium de SuiviCours permettra d’aller plus loin dans l’organisation,
+                            le suivi des élèves et la valorisation de votre accompagnement auprès des familles.
+                        </p>
+                    </div>
+
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="{% url 'signup' %}" class="btn btn-light rounded-pill fw-semibold px-4 py-3">
+                            Créer un compte
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container py-5 text-center">
+        <h2 class="display-5 section-title mb-3">
+            Prêt à mieux organiser vos cours particuliers ?
+        </h2>
+
+        <p class="lead text-secondary mx-auto mb-4" style="max-width: 760px;">
+            SuiviCours vous aide à gagner du temps, à mieux suivre vos élèves
+            et à montrer aux parents que l’accompagnement est sérieux et structuré.
+        </p>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+            <a href="{% url 'signup' %}" class="btn btn-sc-primary">
+                Essayer SuiviCours
+            </a>
+            <a href="{% url 'contact' %}" class="btn btn-sc-outline">
+                Nous contacter
+            </a>
+        </div>
+    </div>
+</section>
 
 
 {% endblock %}

@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
-import datetime
+from datetime import datetime, timedelta
 import decimal
+import uuid
 
 
 class Subject(models.Model):
@@ -58,7 +59,7 @@ class Chapter(models.Model):
 
 
 class Professor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="professor_profile")
 
     default_price = models.fields.DecimalField(max_digits=4, decimal_places=1, default=decimal.Decimal(20.0))
 
@@ -69,21 +70,23 @@ class Professor(models.Model):
     @property
     def email(self):
         return self.user.email
+    
+    @property
+    def name(self):
+        return self.user.get_full_name() or self.user.username
 
     def __str__(self) -> str:
-        return self.user.get_full_name() or self.user.username
+        return self.name
 
 
 
 class Student(models.Model):
-    professor = models.ForeignKey(
-        Professor,
-        on_delete=models.CASCADE,
-        related_name="students"
-    )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=False, null=False)
+    professor = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name="students")
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100, blank=True)
+    slug = models.CharField(max_length=100, unique=True)
 
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="students", blank=True, null=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE, related_name="students", blank=True, null=True)
@@ -95,6 +98,18 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}".strip()
+    
+    @property
+    def full_name(self):
+        return self.first_name + " " + self.last_name
+    
+    @property
+    def initials(self):
+        return self.first_name[0] + self.last_name[0]
+    
+    @property
+    def next_lessons(self):
+        return self.lessons.filter(date__gt=timezone.now()).order_by("date")
     
 
 
@@ -110,7 +125,7 @@ class Lesson(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name="lessons")
 
     date = models.fields.DateTimeField(default=timezone.now)
-    duration = models.fields.DurationField(default=datetime.timedelta(hours=1))
+    duration = models.fields.DurationField(default=timedelta(hours=1))
 
     status = models.CharField(
         max_length=20,
@@ -121,14 +136,31 @@ class Lesson(models.Model):
     homeworks = models.fields.CharField(max_length=255, blank=True) # for the student, before
     reminder = models.fields.CharField(max_length=255, blank=True) # for the professor, before
     notes = models.fields.CharField(max_length=255, blank=True) # for the student, after
-    commment = models.fields.CharField(max_length=255, blank=True) # for the professor, after
+    comment = models.fields.CharField(max_length=255, blank=True) # for the professor, after
+
+    chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True, blank=True)
 
     price = models.fields.DecimalField(max_digits=4, decimal_places=1, default=decimal.Decimal(20.0))
     paid = models.fields.BooleanField(default=False)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["student", "professor", "date"],
+                name="unique_lesson_student_professor_date"
+            )
+        ]
 
     @property
-    def is_past(self):
+    def date_formated(self):
+        return self.date.astimezone(timezone.get_default_timezone()).strftime('%y-%m-%d-%H-%M')
+    
+    @property
+    def end_date(self):
+        return self.date + self.duration
+
+    @property
+    def is_passed(self):
         return self.date < timezone.now()
 
     @property
@@ -137,6 +169,15 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.date:%d/%m/%Y %H:%M}"
+    
+    def toEvent(self):
+        return {
+            "title": self.student.full_name,
+            # "id": self.date_formated,
+            "start": self.date.isoformat(),
+            "end": self.end_date.isoformat(),
+            "editable": False
+        }
 
 
 

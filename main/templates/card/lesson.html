@@ -1,0 +1,41 @@
+<div class="bg-primary-subtle rounded py-1 px-2 my-1">
+    <div class="d-flex align-items-center mb-1">
+        <div class="rounded-circle bg-sc-mint d-flex justify-content-center align-items-center me-2"
+            style="width: 48px; height: 48px;">
+            {{ lesson.student.initials }}
+        </div>
+
+        <div class="flex-grow-1">
+            <p class="h2 mb-1">{{ lesson.student.full_name }}</p>
+            <div>
+                <span class="rounded-pill bg-sc-mint px-2 py-1">{{ lesson.date }}</span>
+                <span class="rounded-pill bg-sc-mint px-2 py-1">{{ lesson.status }}</span>
+            </div>
+            {% if lesson.chapter %}
+            <span>{{ lesson.chapter }}</span>
+            {% endif %}
+        </div>
+
+        <i class="bi bi-arrow-right fs-4 ms-2"></i>
+    </div>
+    
+    <div class="mb-0">
+        {% if lesson.is_passed %}
+            {% if lesson.comment %}
+                <p class="fw-light mb-0">
+                    <b>Commentaire :</b>
+                    {{ lesson.comment }}
+                </p>
+            {% endif %}
+        {% elif lesson.is_upcoming %}
+            {% if lesson.reminder %}
+                <p class="fw-light mb-0">
+                    <b>Rappels :</b>
+                    {{ lesson.reminder }}
+                </p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+
