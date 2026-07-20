@@ -1,0 +1,32 @@
+{% load widget_tweaks %}
+
+<form method='post'>
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        <div class='alert alert-danger'>
+        {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% for field in form %}
+        <div class='form-floating mb-2'>
+        {% if field.errors or form.non_field_errors %}
+            {% render_field field class+='form-control is-invalid' placeholder=' ' %}
+        {% else %}
+            {% render_field field class+='form-control' placeholder=' ' %}
+        {% endif %}
+        
+        <label for='{{ field.id_for_label }}'>{{ field.label }}</label>
+        
+        {% for error in field.errors %}
+            <div class='invalid-feedback'>{{ error }}</div>
+        {% endfor %}
+        </div>
+    {% endfor %}
+    
+    <button class='btn btn-primary' type='submit'>Submit</button>
+</form>
+

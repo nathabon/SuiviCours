@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.models import model_to_dict
 from django.conf import settings
-from .models import Professor, Student, Lesson, Chapter
+from .models import Professor, Student, Lesson, Chapter, Level, Subject
 from . import forms
 from datetime import datetime
 import uuid
@@ -19,7 +19,7 @@ def about_us_view(request: HttpRequest):
     return render(request, 'other/about.html')
 
 def contact(request: HttpRequest):
-    return HttpResponse('<h1> Contact </h1>')
+    return render(request, 'other/contact.html')
 
 
 #MARK: Account
@@ -38,6 +38,12 @@ def logout_view(request: HttpRequest):
     logout(request)
 
     return redirect('login')
+
+@login_required
+def settings_view(request: HttpRequest):
+    prof = request.user.professor_profile
+
+    return render(request, 'other/settings.html', {'prof': prof})
 
 
 def profs_list_view(request: HttpRequest):
@@ -64,8 +70,32 @@ def dashboard_view(request: HttpRequest):
 def dashboard_student_detail_view(request: HttpRequest, student_slug: str):
     prof = request.user.professor_profile
     student = get_object_or_404(Student, professor=prof, slug=student_slug)
+    edit_student_form = forms.EditStudentForm(instance=student)
 
-    return render(request, 'dashboard/dashboard_student.html', {"prof": prof, 'student': student})
+    if request.method == 'POST':
+        edit_student_form = forms.EditStudentForm(request.POST, instance=student)
+
+        if edit_student_form.is_valid():
+            edit_student_form.save()
+
+    return render(request, 'dashboard/dashboard_student.html', {"prof": prof, 'student': student, 'form': edit_student_form})
+
+
+@login_required
+def dashboard_student_add_view(request: HttpRequest):
+    prof = request.user.professor_profile
+    form = forms.NewLessonForm(professor=prof)
+
+    if request.method == "POST":
+        form = forms.NewLessonForm(request.POST, professor=prof)
+
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.save()
+
+            return redirect('dashboard-lesson', date=lesson.date_formated, permanent=True)
+        
+    return render(request, 'dashboard/dashboard_lesson_add.html', {'form': form})
 
 
 @login_required
@@ -118,6 +148,71 @@ def dashboard_parent_lesson_view(request: HttpRequest, student_uuid: uuid.UUID, 
 
 
 #MARK: API
+def api_chapters(request: HttpRequest):
+    chapters = Chapter.objects.all()
+    data = [
+        {
+            "id": chapter.id,
+            "title": chapter.title,
+            "level": chapter.level.slug,
+            "subject": chapter.subject.slug
+        }
+        for chapter in chapters
+    ]
+
+    return JsonResponse(data, safe=False)
+
+
+def api_chapters_level(request: HttpRequest, level_slug: str):
+    chapters = Chapter.objects.filter(
+        level__slug=level_slug
+    )
+
+    data = [
+        {
+            "id": chapter.id,
+            "title": chapter.title,
+            "level": chapter.level.slug,
+            "subject": chapter.subject.slug,
+        }
+        for chapter in chapters
+    ]
+
+    return JsonResponse(data, safe=False)
+
+def api_chapters_subject(request: HttpRequest, subject_slug: str):
+    chapters = Chapter.objects.filter(
+        subject__slug=subject_slug
+    )
+
+    data = [
+        {
+            "id": chapter.id,
+            "title": chapter.title,
+            "level": chapter.level.slug,
+            "subject": chapter.subject.slug,
+        }
+        for chapter in chapters
+    ]
+
+    return JsonResponse(data, safe=False)
+
+def api_subjects_level(request: HttpRequest, level_slug: str):
+    subjects = Subject.objects.filter(
+        chapters__level__slug=level_slug
+    ).distinct().order_by("name")
+
+    data = [
+        {
+            "id": subject.id,
+            "name": subject.name,
+            "slug": subject.slug,
+        }
+        for subject in subjects
+    ]
+
+    return JsonResponse(data, safe=False)
+
 @login_required
 def api_student(request: HttpRequest, id: str):
     prof = request.user.professor_profile

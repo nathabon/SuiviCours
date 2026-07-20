@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
+
+{% block main_class %}
+flex-grow-1 d-flex align-items-center justify-content-center py-5 px-3
+{% endblock %}
 
 {% block content %}
 
+<div class="rounded-4 w-100" style="max-width: 30em;">
+{% include 'card/new_lesson.html' %}    
+</div>
 
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
-
-<script src="{% static 'validation.js' %}"></script>
 
 {% endblock %}
