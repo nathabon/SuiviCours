@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.models import model_to_dict
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.template.loader import render_to_string
 from .models import Professor, Student, Lesson, Chapter, Level, Subject
 from . import forms
 from datetime import datetime
@@ -18,8 +20,46 @@ def hello_view(request: HttpRequest):
 def about_us_view(request: HttpRequest):
     return render(request, 'other/about.html')
 
-def contact(request: HttpRequest):
-    return render(request, 'other/contact.html')
+
+def contact_view(request: HttpRequest):
+    form = forms.ContactForm()
+
+    if request.method == 'POST':
+        form = forms.ContactForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            print("email envoyé")
+
+            send_mail(
+                f"Formulaire de contact: {subject}",
+                f"Voici le message reçu de {name} au sujet de {subject} : \n {message}",
+                'contact@suivicours.fr',
+                ['contact@suivicours.fr']
+            )
+
+            return redirect('merci-contact')
+
+    return render(request, 'other/contact.html', {'form': form})
+
+
+def merci_contact_view(request: HttpRequest):
+    return render(request, 'other/merci_contact.html')
+
+def cgu_view(request: HttpRequest):
+    return render(request, 'other/cgu.html')
+
+def cgv_view(request: HttpRequest):
+    return render(request, 'other/cgv.html')
+
+def mentions_legales_view(request: HttpRequest):
+    return render(request, 'other/mentions_legales.html')
+
+def politique_confidentialite_view(request: HttpRequest):
+    return render(request, 'other/politique_confidentialite.html')
 
 
 #MARK: Account
@@ -71,6 +111,7 @@ def dashboard_student_detail_view(request: HttpRequest, student_slug: str):
     prof = request.user.professor_profile
     student = get_object_or_404(Student, professor=prof, slug=student_slug)
     edit_student_form = forms.EditStudentForm(instance=student)
+    new_lesson_form = forms.NewLessonForm(prefix="new_lesson", professor=prof, student=student)
 
     if request.method == 'POST':
         edit_student_form = forms.EditStudentForm(request.POST, instance=student)
@@ -78,7 +119,11 @@ def dashboard_student_detail_view(request: HttpRequest, student_slug: str):
         if edit_student_form.is_valid():
             edit_student_form.save()
 
-    return render(request, 'dashboard/dashboard_student.html', {"prof": prof, 'student': student, 'form': edit_student_form})
+        new_lesson_form = forms.NewLessonForm(request.POST, prefix="new_lesson", professor=prof, student=student)
+        if new_lesson_form.is_valid():
+            print("oodkoa")
+
+    return render(request, 'dashboard/dashboard_student.html', {"prof": prof, 'student': student, 'form': edit_student_form, 'new_lesson_form': new_lesson_form})
 
 
 @login_required

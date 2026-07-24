@@ -8,7 +8,12 @@ urlpatterns = [
 
     path('hello/', views.hello_view, name='hello'),
     path('about-us/', views.about_us_view, name='about'),
-    path('contact/', views.contact, name='contact'),
+    path('contact/', views.contact_view, name='contact'),
+    path('cgu/', views.cgu_view, name='cgu'),
+    path('cgv/', views.cgv_view, name='cgv'),
+    path('mentions-legales/', views.mentions_legales_view, name='mentions-legales'),
+    path('politique-confidentialite/', views.politique_confidentialite_view, name='politique-confidentialite'),
+    path('merci/contact', views.merci_contact_view, name='merci-contact'),
 
     path('admin/', admin.site.urls, name='admin'),
 

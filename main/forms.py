@@ -2,16 +2,20 @@ from django import forms
 from django.forms import fields
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django.forms.widgets import CheckboxInput
 from django.core.exceptions import ValidationError
 
 from .models import Lesson, Chapter, Professor, Student
-
+import time
 import datetime
+
 
 class DateInput(forms.DateInput):
     input_type = "date"
 
-    def __init__(self, **kwargs):
+    def __init__(self, step: int = 15, **kwargs):
+        attrs = kwargs.setdefault("attrs", {})
+        attrs.setdefault("step", step * 60)
         kwargs["format"] = "%Y-%m-%d"
         super().__init__(**kwargs)
 
@@ -25,7 +29,7 @@ class DateTimeInput(forms.DateTimeInput):
 
     def __init__(self, step: int = 15, **kwargs):
         attrs = kwargs.setdefault("attrs", {})
-        attrs.setdefault("step", step * 60)
+        attrs["step"] = 900
 
         kwargs["format"] = "%Y-%m-%dT%H:%M"
 
@@ -38,7 +42,7 @@ class DurationInput(forms.TimeInput):
     def __init__(self, step: int = 15, **kwargs):
         attrs = kwargs.setdefault("attrs", {})
 
-        attrs.setdefault("step", step * 60)  # 900 secondes / 15 minutes
+        attrs.setdefault("step", step * 60)
         attrs.setdefault("min", "00:15")
         attrs.setdefault("max", "03:00")
 
@@ -54,10 +58,28 @@ class SignupForm(UserCreationForm):
 
 
 class NewLessonForm(forms.ModelForm):
-    duration = forms.TimeField(
+    TIME_CHOICES = [
+        (
+            datetime.time(hour=hour, minute=minute),
+            f"{hour:02d}h{minute:02d}",
+        )
+        for hour in range(24)
+        for minute in (0, 15, 30, 45)
+    ]
+
+    DURATION_CHOICES = [
+        (
+            minutes,
+            f"{minutes // 60:02d}h{minutes % 60:02d}",
+        )
+        for minutes in range(15, 181, 15)
+    ]
+
+
+    duration = forms.TypedChoiceField(
         label="Durée",
-        input_formats=["%H:%M"],
-        widget=DurationInput(),
+        choices=DURATION_CHOICES,
+        coerce=int,
     )
 
     class Meta:
@@ -66,6 +88,7 @@ class NewLessonForm(forms.ModelForm):
 
         widgets = {
             "date": DateTimeInput(),
+            "paid": CheckboxInput(attrs={'class':'form-check-input', 'role': 'switch'})
         }
 
     def __init__(
@@ -84,13 +107,20 @@ class NewLessonForm(forms.ModelForm):
                 professor=professor
             )
 
-            self.fields["price"] = fields.DecimalField(
+            self.fields["price"] = forms.DecimalField(
                 max_digits=4,
                 decimal_places=1,
                 initial=professor.default_price,
             )
 
         student_id = None
+
+        self.fields["chapter"].widget.attrs.update({
+            "class": "searchable-select mb-2",
+            "placeholder": "Rechercher un chapitre…",
+        })
+        self.fields["chapter"].empty_label = "Rechercher un chapitre…"
+
 
         if self.data.get("student"):
             student_id = self.data.get("student")
@@ -101,6 +131,7 @@ class NewLessonForm(forms.ModelForm):
         if student is not None:
             self.instance.student = student
             student_id = student.id
+            self.fields.pop("student")
 
         if student_id and professor is not None:
             try:
@@ -117,60 +148,82 @@ class NewLessonForm(forms.ModelForm):
             except Student.DoesNotExist:
                 pass
 
-        if not self.is_bound and self.instance and self.instance.duration:
-            total_minutes = int(self.instance.duration.total_seconds() // 60)
+        if not self.is_bound and self.instance and self.instance.pk:
+            if self.instance.duration:
+                total_minutes = int(
+                    self.instance.duration.total_seconds() // 60
+                )
 
-            hours, minutes = divmod(total_minutes, 60)
+                self.initial["duration"] = total_minutes
 
-            self.initial["duration"] = datetime.time(hour=hours, minute=minutes)
+            if self.instance.date:
+                self.initial["date"] = self.instance.date.date()
+                self.initial["time"] = self.instance.date.time().replace(
+                    second=0,
+                    microsecond=0,
+                )
 
+        
+
+        self.order_fields([
+            'notes',
+            'comment',
+            'reminders',
+            'homeworks',
+        ])
+
+    @property
+    def selected_fields(self):
+        included_names = ['comment', 'reminder', 'homeworks', 'notes', 'chapter']
+        return [self[name] for name in self.fields if name in included_names]
 
     def clean_duration(self) -> datetime.timedelta:
-        duration_time = self.cleaned_data.get("duration")
-
-        if not isinstance(duration_time, datetime.time):
-            raise ValidationError("La durée indiquée est invalide.")
-
-        total_minutes = duration_time.hour * 60 + duration_time.minute
-
-        if duration_time.second != 0 or total_minutes % 15 != 0:
-            raise ValidationError("La durée doit être définie par intervalles de 15 minutes.")
+        total_minutes = self.cleaned_data["duration"]
 
         if total_minutes < 15:
-            raise ValidationError("Une séance doit durer au moins 15 minutes.")
+            raise ValidationError(
+                "Une séance doit durer au moins 15 minutes."
+            )
 
         if total_minutes > 180:
-            raise ValidationError("Une séance ne peut pas durer plus de 3 heures.")
+            raise ValidationError(
+                "Une séance ne peut pas durer plus de 3 heures."
+            )
+
+        if total_minutes % 15 != 0:
+            raise ValidationError(
+                "La durée doit être définie par intervalles de 15 minutes."
+            )
 
         return datetime.timedelta(minutes=total_minutes)
-    
-    def clean_date(self) -> datetime.datetime:
-        lesson_date = self.cleaned_data["date"]
 
-        if lesson_date.minute % 15 != 0 or lesson_date.second != 0 or lesson_date.microsecond != 0:
+    def clean_time(self) -> datetime.time:
+        lesson_time = self.cleaned_data["time"]
+
+        if (
+            lesson_time.minute % 15 != 0
+            or lesson_time.second != 0
+            or lesson_time.microsecond != 0
+        ):
             raise ValidationError(
                 "L’heure du cours doit être définie par intervalles de 15 minutes."
             )
 
-        return lesson_date
+        return lesson_time
 
     def clean(self):
         cleaned_data = super().clean()
 
         lesson_date = cleaned_data.get("date")
-        duration = cleaned_data.get("duration")
-        status = cleaned_data.get("status")
+        lesson_time = cleaned_data.get("time")
 
-        if lesson_date is None or duration is None or status is None:
+        if lesson_date is None or lesson_time is None:
             return cleaned_data
 
-        today = datetime.date.today()
-
-        # if status == "planned" and lesson_date + duration < today:
-        #     raise ValidationError("Le statut de la leçon est 'Prévue', alors que la date est passée.")
-
-        # if status == "done" and lesson_date > today:
-        #     raise ValidationError("Le statut de la leçon est 'Faite', alors que la date est dans le futur.")
+        cleaned_data["date"] = datetime.datetime.combine(
+            lesson_date,
+            lesson_time,
+        )
 
         return cleaned_data
 
@@ -185,3 +238,11 @@ class EditStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ['subject', 'level', 'comment', 'default_price']
+
+
+class ContactForm(forms.Form):
+    name = fields.CharField(max_length=100, required=True)
+    email = fields.EmailField(required=True)
+    subject = fields.CharField(max_length=255, required=True)
+    message = fields.CharField(widget=forms.Textarea, required=True)
+    consent = fields.BooleanField(required=True)

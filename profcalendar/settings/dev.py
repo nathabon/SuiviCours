@@ -10,4 +10,9 @@ DATABASES: dict[str, Any] = {
     }
 }
 
-ALLOWED_HOSTS: list[str] = []
+ALLOWED_HOSTS: list[str] = [
+    "localhost",
+    "192.168.1.27"
+]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

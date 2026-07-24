@@ -57,7 +57,7 @@
         <div class="col-lg mb-3">
             <h2>Mes élèves</h2>
             {% for student in prof.students.all %}
-                <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-student' student.slug %}">{% include 'card/student.html' %}</a>
+                <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-student' student.slug %}">{% include 'card/student_card.html' %}</a>
             {% endfor %}
 
             <a class="link-secondary text-black text-decoration-none" href="">
@@ -68,7 +68,7 @@
 
             <h2 class="mt-4">Mes cours</h2>
             {% for lesson in prof.lessons.all %}
-                <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{% include 'card/lesson.html' %}</a>
+                <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{% include 'card/lesson_card.html' %}</a>
             {% endfor %}
 
             <a class="link-secondary text-black text-decoration-none" href="">

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block title %} - Élève {{ student.first_name }} {% endblock %}
 
@@ -154,7 +155,7 @@ textarea {
         <h2>Prochains cours</h2>
         
         {% for lesson in student.next_lessons.all %}
-            <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{% include 'card/lesson.html' %}</a>
+            <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{% include 'card/lesson_card.html' %}</a>
         {% endfor %}
 
         {% if student.next_lessons.count == 0 %}
@@ -174,10 +175,13 @@ textarea {
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
         </div>
-        <h2>Séances (2)</h2>
+        <h2>Séances ({{ student.lessons.count }})</h2>
         {% for lesson in student.lessons.all %}
-            <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{%include 'card/lesson.html' %}</a>
+            <a class="link-secondary text-black text-decoration-none" href="{% url 'dashboard-lesson' lesson.date_formated %}">{%include 'card/lesson_card.html' %}</a>
         {% endfor %}
+        <button class="" type="button" data-bs-toggle="modal" data-bs-target="#newLessonModal">
+            Créer une lesson
+        </button>
     </div>
 </div>
 
@@ -205,6 +209,36 @@ textarea {
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="newLessonModal" tabindex="-1" aria-labelledby="newLessonModalLabel" data-errors="{{ new_lesson_form.errors|length }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="shareModalLabel">Créer une nouvelle lesson</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% with form=new_lesson_form %}
+                {% include 'card/new_lesson.html' %}
+                {% endwith %}
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                {% url 'dashboard-parent-student' student.uuid as parent_url %}
+
+                <button type="button" class="btn btn-primary"
+                    data-url="{{ request.scheme }}://{{ request.get_host }}{{ parent_url }}"
+                    onclick="copyStudentLink(this)">
+                    Copier le lien
+                </button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
 
 <script>
     function toggleEmailEdit() {
@@ -287,11 +321,33 @@ textarea {
 </script>
 
 <script>
-    function selectLevel()
     const subjectSelect = document.getElementById("id_subject");
     const levelSelect   = document.getElementById("id_level");
 
 
+</script>
+
+<script src="{% static 'js/forms/validation_new_lesson.js' %}"></script>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modalElement = document.getElementById("newLessonModal");
+
+        if (!modalElement) {
+            return;
+        }
+
+        const errors = Number(modalElement.dataset.errors);
+
+        console.log("Nombre d'erreurs :", errors);
+
+        if (errors > 0) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modal.show();
+        }
+    });
 </script>
 
 {% endblock %}

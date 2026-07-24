@@ -19,6 +19,13 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def title(self):
+        if self.short is None or self.short != '':
+            return self.short
+
+        return self.name
+
 
 class Level(models.Model):
     name  = models.CharField(max_length=100, unique=True)
@@ -29,6 +36,13 @@ class Level(models.Model):
         ordering = ["name"]
 
     def __str__(self):
+        return self.name
+
+    @property
+    def title(self):
+        if self.short is None or self.short != '':
+            return self.short
+
         return self.name
 
 
@@ -57,7 +71,7 @@ class Chapter(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.level} - {self.subject} - {self.title}"
+        return f"{self.level.title} - {self.subject.title} - {self.title}"
 
 
 class Professor(models.Model):
@@ -166,10 +180,10 @@ class Lesson(models.Model):
     note = models.PositiveIntegerField(default=4, validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
-    homeworks = models.fields.CharField(max_length=255, blank=True) # for the student, before
-    reminder = models.fields.CharField(max_length=255, blank=True) # for the professor, before
-    notes = models.fields.CharField(max_length=255, blank=True) # for the student, after
-    comment = models.fields.CharField(max_length=255, blank=True) # for the professor, after
+    homeworks = models.fields.CharField(max_length=255, blank=True, help_text="À l'intention de l'étudiant") # for the student, before
+    reminder = models.fields.CharField(max_length=255, blank=True, help_text="Pour le professeur") # for the professor, before
+    notes = models.fields.CharField(max_length=255, blank=True, help_text="Visible par l'étudiant pour voir un recap de la séance") # for the student, after
+    comment = models.fields.CharField(max_length=255, blank=True, help_text="Pour le professeur pour avoir des notes sur la séance") # for the professor, after
 
     chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True, blank=True)
 
