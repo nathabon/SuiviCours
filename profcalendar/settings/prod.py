@@ -12,7 +12,6 @@ DATABASES = {
 }
 
 
-print(DATABASES)
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get(

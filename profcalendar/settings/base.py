@@ -17,7 +17,6 @@ import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-print(BASE_DIR)
 
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / '.env')
@@ -31,7 +30,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list[str] = []
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'hello'

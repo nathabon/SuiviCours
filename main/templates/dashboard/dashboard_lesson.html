@@ -2,25 +2,6 @@
 
 {% block content %}
 
-<h1>Dashboard lesson</h1>
-
-<p>Le <b>{{ lesson.date }}</b> avec <a href="{% url 'dashboard-student' lesson.student.slug %}">{{ lesson.student.first_name }}</a> </p>
-
-<p>Status : {{ lesson.status }} | {% if lesson.paid %} Payée {% else %} A payer {% endif %} ({{ lesson.price }} €)</p>
-
-{% if lesson.is_upcoming %}
-    <b>Devoirs donnés</b>
-    <p>{{ lesson.homeworks }}</p>
-
-    <b>Notes</b>
-    <p>{{ lesson.reminders }}</p>
-
-{% else %}
-    <b>Commentaires</b>
-    <p>{{ lesson.comment }}</p>
-    
-    <b>Commentaires pour les parents</b>
-    <p>{{ lesson.notes }}</p>
-{% endif %}
+<h1></h1>
 
 {% endblock %}

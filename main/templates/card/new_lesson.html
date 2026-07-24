@@ -1,0 +1,142 @@
+{% load widget_tweaks %}
+
+<form method='post'>
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        <div class='alert alert-danger'>
+        {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    
+    <div class="form-floating">
+
+    </div>
+
+    <!-- Date et durée -->
+    <div class="row g-2">
+        <div class="col form-floating mb-2">
+            {% if form.date.errors or form.non_field_errors %}
+            {% render_field form.date class+='form-control is-invalid' placeholder=' ' %}
+            {% else %}
+            {% render_field form.date class+='form-control' placeholder=' ' %}
+            {% endif %}
+            
+            <label class='ms-1' for='{{ form.date.id_for_label }}'>{{ form.date.label }}</label>
+            
+            {% for error in form.date.errors %}
+            <div class='invalid-feedback'>{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="col form-floating mb-2">
+            {% if form.duration.errors or form.non_field_errors %}
+            {% render_field form.duration class+='form-control is-invalid' placeholder=' ' %}
+            {% else %}
+            {% render_field form.duration class+='form-control' placeholder=' ' %}
+            {% endif %}
+        
+            <label class='ms-1' for='{{ form.duration.id_for_label }}'>{{ form.duration.label }}</label>
+        
+            {% for error in form.duration.errors %}
+            <div class='invalid-feedback'>{{ error }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Textfields -->
+    {% for field in form.selected_fields %}
+        <div class='form-floating mb-2'>
+        {% if field.errors or form.non_field_errors %}
+            {% render_field field class+='form-control is-invalid' placeholder=' ' %}
+        {% else %}
+            {% render_field field class+='form-control' placeholder=' ' %}
+        {% endif %}
+        
+        <label for='{{ field.id_for_label }}'>{{ field.label }}</label>
+        <span id="helpText{{ field.id }}" class="form-text">{{ field.help_text }}</span>
+        
+        {% for error in field.errors %}
+            <div class='invalid-feedback'>{{ error }}</div>
+        {% endfor %}
+        </div>
+    {% endfor %}
+
+    <!-- Prix -->
+    <div class="row">
+        <div class="col ">
+            {% with field=form.status %}
+            <div class='form-floating mb-2'>
+                {% if field.errors or form.non_field_errors %}
+                {% render_field field class+='form-control is-invalid' placeholder=' ' aria-describedby='price-group' %}
+                {% else %}
+                {% render_field field class+='form-control' placeholder=' ' aria-describedby='price-group'%}
+                {% endif %}
+        
+                <label for='{{ field.id_for_label }}'>{{ field.label }}</label>
+        
+                {% for error in field.errors %}
+                <div class='invalid-feedback'>{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endwith %}
+        </div>
+
+        <div class="col ">
+            {% with field=form.price %}
+            <div class='form-floating input-group mb-2'>
+                {% if field.errors or form.non_field_errors %}
+                {% render_field field class+='form-control is-invalid' placeholder=' ' aria-describedby='price-group' %}
+                {% else %}
+                {% render_field field class+='form-control' placeholder=' ' aria-describedby='price-group'%}
+                {% endif %}
+
+                <label for='{{ field.id_for_label }}'>{{ field.label }}</label>
+                <span class="input-group-text" id="price-group">€</span>
+
+                {% for error in field.errors %}
+                <div class='invalid-feedback'>{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endwith %}
+        </div> 
+
+        <div class="col my-auto">
+            {% with field=form.price %}
+            <div class='form-check form-switch mb-2'>
+                <input type='checkbox' class="form-check-input" role="switch" id="{{ field.id_for_labbel }}"></input>
+            
+                <label class='form-check-label' for='{{ field.id_for_label }}'>{{ field.label }}</label>
+            
+                {% for error in field.errors %}
+                <div class='invalid-feedback'>{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endwith %}
+        </div>
+    </div>
+    
+    <button class='btn btn-primary' type='submit'>Créer</button>
+</form>
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<script>document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".searchable-select").forEach((element) => {
+            new TomSelect(element, {
+                create: false,
+                maxItems: 1,
+                allowEmptyOption: true,
+                placeholder: element.dataset.placeholder
+                    || element.getAttribute("placeholder")
+                    || "Rechercher…",
+            });
+        });
+    });</script>

@@ -8,18 +8,22 @@ urlpatterns = [
 
     path('hello/', views.hello_view, name='hello'),
     path('about-us/', views.about_us_view, name='about'),
-    path('contact/', views.contact, name='contact'),
+    path('contact/', views.contact_view, name='contact'),
+    path('cgu/', views.cgu_view, name='cgu'),
+    path('cgv/', views.cgv_view, name='cgv'),
+    path('mentions-legales/', views.mentions_legales_view, name='mentions-legales'),
+    path('politique-confidentialite/', views.politique_confidentialite_view, name='politique-confidentialite'),
+    path('merci/contact', views.merci_contact_view, name='merci-contact'),
 
     path('admin/', admin.site.urls, name='admin'),
 
     path('signup/',  views.signup_view, name="signup"),
     path('login/', LoginView.as_view(template_name='account/login.html', redirect_authenticated_user=True), name='login'),
     path('logout/', LogoutView.as_view(template_name='account/logout.html'), name='logout'),
-    
-    path('profs/', views.profs_list_view, name='prof-list'),
-    path('profs/<str:username>/', views.prof_detail_view, name="prof-detail"),
+    path('settings/', views.settings_view, name='settings'),
 
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('dashboard/student/add/', views.dashboard_student_add_view, name='dashboard-add-student'),
     path('dashboard/student/<slug:student_slug>/', views.dashboard_student_detail_view, name='dashboard-student'),
     path('dashboard/lesson/add/', views.dashboard_lesson_add_view, name='dashboard-add-lesson'),
     path('dashboard/lesson/<str:date>/', views.dashboard_lesson_detail_view, name='dashboard-lesson'),
@@ -27,7 +31,10 @@ urlpatterns = [
     path('parent/<str:student_uuid>/', views.dashboard_parent_student_view, name='dashboard-parent-student'),
     path('parent/<str:student_uuid>/lesson/<str:date>/', views.dashboard_parent_lesson_view, name='dashboard-parent-lesson'),
 
-
+    path('api/chapters/', views.api_chapters, name='api-chapters'),
+    path('api/chapters/level/<str:level_slug>', views.api_chapters_level, name='api-chapters-level'),
+    path('api/chapters/subject/<str:subject_slug>', views.api_chapters_subject, name='api-chapters-subject'),
+    path('api/subjects/level/<str:level_slug>', views.api_subjects_level, name='api-subject-level'),
     path('api/student/<int:id>/', views.api_student, name='api-student'),
     path('api/student/<int:id>/chapters/', views.api_student_chapters, name='api-student-chapters'),
 ]

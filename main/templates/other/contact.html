@@ -3,5 +3,166 @@
 
 {% block title %} - Contact {% endblock %}
 
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis px-3 py-2 mb-3">Nous contacter</span>
+                <h1 class="display-5 fw-bold mb-3">Une question sur SuiviCours.fr&nbsp;?</h1>
+                <p class="lead text-body-secondary mb-0">
+                    Une difficulté, une suggestion ou une demande concernant votre compte&nbsp;?
+                    Envoyez-nous un message, nous vous répondrons dans les meilleurs délais.
+                </p>
+            </div>
+        </div>
 
+        <div class="row g-4 justify-content-center align-items-stretch">
+            <div class="col-lg-5">
+                <div class="h-100 rounded-4 border bg-body-tertiary p-4 p-lg-5">
+                    <h2 class="h4 fw-bold mb-4">Comment pouvons-nous vous aider&nbsp;?</h2>
+
+                    <div class="d-flex gap-3 mb-4">
+                        <div class="flex-shrink-0">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary" style="width:44px;height:44px;">
+                                <i class="bi bi-question-circle" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="h6 fw-bold mb-1">Utilisation du service</h3>
+                            <p class="text-body-secondary mb-0">Inscription, gestion des élèves, calendrier, rappels, exports ou accès des familles.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 mb-4">
+                        <div class="flex-shrink-0">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary" style="width:44px;height:44px;">
+                                <i class="bi bi-credit-card" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="h6 fw-bold mb-1">Offre Premium</h3>
+                            <p class="text-body-secondary mb-0">Abonnement, paiement Stripe, facture, résiliation ou fonctionnalités Premium.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 mb-4">
+                        <div class="flex-shrink-0">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary" style="width:44px;height:44px;">
+                                <i class="bi bi-shield-check" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="h6 fw-bold mb-1">Données personnelles</h3>
+                            <p class="text-body-secondary mb-0">Exercice de vos droits, suppression de compte ou question relative à la confidentialité.</p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <p class="text-body-secondary mb-2">Vous pouvez aussi nous écrire directement à&nbsp;:</p>
+                    <a class="fw-semibold text-decoration-none" href="mailto:contact@suivicours.fr">
+                        <i class="bi bi-envelope me-2" aria-hidden="true"></i>contact@suivicours.fr
+                    </a>
+
+                    <p class="small text-body-secondary mt-4 mb-0">
+                        Pour des raisons de sécurité, ne transmettez jamais votre mot de passe ni vos données bancaires.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="h-100 rounded-4 border bg-body p-4 p-lg-5 shadow-sm">
+                    <h2 class="h4 fw-bold mb-2">Envoyer un message</h2>
+                    <p class="text-body-secondary mb-4">Les champs marqués d’un astérisque sont obligatoires.</p>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" action="{% url 'contact' %}" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">Nom <span class="text-danger">*</span></label>
+                                {% render_field form.name class+="form-control" placeholder="Votre nom" %}
+                                {% for error in form.name.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Adresse e-mail <span class="text-danger">*</span></label>
+                                {% render_field form.email class+="form-control" placeholder="vous@exemple.fr" %}
+                                {% for error in form.email.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                            </div>
+
+                            <div class="col-12">
+                                <label for="{{ form.subject.id_for_label }}" class="form-label">Objet <span class="text-danger">*</span></label>
+                                {% render_field form.subject class+="form-select" %}
+                                {% for error in form.subject.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                            </div>
+
+                            <div class="col-12">
+                                <label for="{{ form.message.id_for_label }}" class="form-label">Message <span class="text-danger">*</span></label>
+                                {% render_field form.message class+="form-control" rows="7" placeholder="Décrivez votre demande avec le plus de précision possible…" %}
+                                {% for error in form.message.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                <div class="form-text">Évitez de mentionner des données sensibles concernant un élève.</div>
+                            </div>
+
+                            {% if form.captcha %}
+                                <div class="col-12">
+                                    {{ form.captcha }}
+                                    {% for error in form.captcha.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <div class="col-12">
+                                <div class="form-check">
+                                    {% render_field form.consent class+="form-check-input" %}
+                                    <label class="form-check-label" for="{{ form.consent.id_for_label }}">
+                                        J’accepte que les informations transmises soient utilisées pour répondre à ma demande.
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    {% for error in form.consent.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                </div>
+                                <p class="small text-body-secondary mt-2 mb-0">
+                                    Pour en savoir plus, consultez notre <a href="{% url 'politique-confidentialite' %}">Politique de confidentialité</a>.
+                                </p>
+                            </div>
+
+                            <div class="col-12 pt-2">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-send me-2" aria-hidden="true"></i>Envoyer le message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-10">
+                <div class="rounded-4 bg-primary-subtle p-4 text-center">
+                    <h2 class="h5 fw-bold mb-2">Vous avez trouvé un problème technique&nbsp;?</h2>
+                    <p class="text-body-secondary mb-0">
+                        Indiquez si possible la page concernée, l’action effectuée et le message d’erreur affiché.
+                        Ne transmettez aucun mot de passe ni aucune information confidentielle.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

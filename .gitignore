@@ -1,4 +1,8 @@
 .env
+env/
+.vscode
+__pycache__
+.mypy_cache
 .env.*
 !.env.example
 

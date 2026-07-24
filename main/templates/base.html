@@ -16,18 +16,18 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon_io/favicon-32x32.png' %}">
     <style>
         .navbar-logo {
-    height: 50px;
-    width: auto;
-    max-width: 220px;
-    display: block;
-}
+            height: 50px;
+            width: auto;
+            max-width: 220px;
+            display: block;
+        }
 
-@media (max-width: 576px) {
-    .navbar-logo {
-        height: 40px;
-        max-width: 200px;
-    }
-}
+        @media (max-width: 576px) {
+            .navbar-logo {
+                height: 40px;
+                max-width: 200px;
+            }
+        }
     </style>
 </head>
 
@@ -99,7 +99,7 @@
 
                     <p class="text-secondary small mb-0">
                         Code source disponible sur
-                        <a class="link-primary text-decoration-none" href="https://github.com/nathabon/profcalendar/tree/main" target="_blank"
+                        <a class="link-primary text-decoration-none" href="https://github.com/nathabon/SuiviCours/tree/main" target="_blank"
                             rel="noopener">GitHub</a>.
                     </p>
                 </div>
@@ -115,9 +115,6 @@
 
     <!-- MARK: Script -->
     <script src="{% static 'js/bootstrap/bootstrap.bundle.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
 
     {% block script %}{% endblock %}
 </body>
